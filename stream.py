@@ -55,8 +55,8 @@ try:
     st.pyplot(plt.gcf())
     plt.close()
 
-    VTH_PLUS = st.number_input('Enter +VTH(V)',format = "%.7f")
-    VTH_MINUS = st.number_input('Enter -VTH(V)',format = "%.7f")
+    VTH_PLUS = st.number_input('Enter +VTH(V):',format = "%.7f")
+    VTH_MINUS = st.number_input('Enter -VTH(V):',format = "%.7f")*-1
     st.write('+Vth = ', VTH_PLUS,'Volts and -Vth = ', VTH_MINUS,'Volts')
     peaks, _ = find_peaks(current, height=0)
     T = []
@@ -156,6 +156,7 @@ try:
     st.write(' ')
     st.dataframe(IC_max.style.format("{:.8f}"),use_container_width=True)
 except NameError:
+    st.divider()
     foot = '''<center><h2><span style="color:blue">No File Uploaded or Some Error occured</span></h2></center>'''
     st.markdown(foot,unsafe_allow_html=True)
 
@@ -165,7 +166,7 @@ st.divider()
 footer = '''<center style="color:blue">
 
 <a href="https://github.com/ritartha/critical_current_extract_v1.git">
-  <center>  <img src="https://raw.githubusercontent.com/ritartha/critical_current_extract_v1/088df3773a38616949b0a14bd5763e335a3ae225/4MhUS4CzoLbx.gif" height=50 align="center"></center>
+  <center>  <img src="https://raw.githubusercontent.com/ritartha/critical_current_extract_v1/088df3773a38616949b0a14bd5763e335a3ae225/4MhUS4CzoLbx.gif" height=35 align="center"></center>
   Github link</a></center>
   ''';
 st.markdown(footer,unsafe_allow_html=True)
