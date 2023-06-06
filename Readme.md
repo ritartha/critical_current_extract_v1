@@ -3,6 +3,10 @@
 
 <li>Open cmd or terminal and run :<code>git clone https://github.com/ritartha/critical_current_extract_v1.git</code>
 </li>
+  
+<li>Change the directory to :<code>cd critical_current_extract_v1</code>
+</li>  
+  
 
 <li>Install the required python modules:
 
