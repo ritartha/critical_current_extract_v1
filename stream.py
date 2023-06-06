@@ -165,7 +165,7 @@ st.divider()
 footer = '''<center style="color:blue">
 
 <a href="https://github.com/ritartha/critical_current_extract_v1.git">
-  <center>  <img src="https://icons.iconarchive.com/icons/limav/flat-gradient-social/48/Github-icon.png" height=50 align="center"></center>
+  <center>  <img src="https://icons8.com/icon/4MhUS4CzoLbx/github" height=50 align="center"></center>
   Github link</a></center>
   ''';
 st.markdown(footer,unsafe_allow_html=True)
