@@ -6,6 +6,8 @@ import os
 from datetime import datetime
 from scipy.signal import find_peaks
 import streamlit as st
+import plotly.express as px
+from plotly.figure_factory import create_distplot
 h1 = '''<center><h1 style="color:blue;"><span style="color:green;">Extract</span> Critical Current</h1></center>'''
 h2 = '''<center><h2>Upload <span style="color:rgb(9, 0, 128);background-color: yellow;">.csv</span> file obtained from the <span style="color:rgb(9, 0, 128);background-color: yellow;">.bin</span> file.<br> <span style="color:red">⚠️Do not upload any other csv file.⚠️</span></h2></center>'''
 st.markdown(h1,unsafe_allow_html=True)
@@ -56,24 +58,28 @@ try:
     VTH_PLUS = st.number_input('Enter +VTH(V)',format = "%.7f")
     VTH_MINUS = st.number_input('Enter -VTH(V)',format = "%.7f")
     st.write('+Vth = ', VTH_PLUS,'Volts and -Vth = ', VTH_MINUS,'Volts')
-    st.divider()
-    
-    st.markdown('<h5><span style="color:red">Set</span> Histogram Parameters:</h5>',unsafe_allow_html=True)
-    binsize= st.slider(
-            'Select bins number',
-            0,1000,10)
-    st.write('Bins:', binsize)
     peaks, _ = find_peaks(current, height=0)
-    #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-    curr = []
-    volt = []
-
     T = []
     for i in range(len(peaks)-1):
         del_peak = peaks[i+1] - peaks[i]
         T.append(del_peak/4)
     T = int(np.mean(T))
+    st.write('Number of datapoints in each phase =',T)
+    
+    st.divider()
+    
+    st.markdown('<h5><span style="color:red">Set</span> Histogram Parameters:</h5>',unsafe_allow_html=True)
+    binsize= st.slider(
+            'Select bins number',
+            10,3000,10)
+    st.write('Bins:', binsize)
+    
+    #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    curr = []
+    volt = []
 
+
+    
     for i in range(0,int(len(current)/T)):
         #print(i*25,(1+i)*25);
         curr.append(current[i*T:(1+i)*T])
@@ -110,15 +116,23 @@ try:
         count = count+1
         IC_list.append(IC)
         
-        
-    agree = st.checkbox('Show Distribution')
-    if agree:
-        sns.histplot(IC_dict,bins=binsize,kde=True)
+    st.divider()
+    option = st.selectbox('Plotting Tool',('Matplotlib','Plotly'))
+    if option == 'Matplotlib':
+        agree = st.checkbox('Show Distribution')
+        if agree:
+            sns.histplot(IC_dict,bins=binsize,kde=True)
+        else:
+            sns.histplot(IC_dict,bins=binsize,kde=False)   
+        st.pyplot(plt.gcf())
     else:
-        sns.histplot(IC_dict,bins=binsize,kde=False)   
-    st.pyplot(plt.gcf())
-
-
+        import plotly.express as px
+        from plotly.figure_factory import create_distplot
+        fig = px.histogram(IC_dict,nbins = binsize,color_discrete_sequence=["red", "green", "blue", "goldenrod"])
+        fig.update_layout(yaxis_title="Count") 
+        fig.update_layout(xaxis_title="Critical Current") 
+        st.plotly_chart(fig, use_container_width=True)
+    
     st.divider()
     IC_max = pd.DataFrame(find_ic_from_histogram(IC_dict,binsize),index=['Most frequent occurance'])
     
@@ -150,8 +164,8 @@ st.divider()
 
 footer = '''<center style="color:blue">
 
-<a href="https://www.dropbox.com/sh/bhzuglx4r4gzju0/AADeVLy_V90XBTCGnJbU5OG1a?dl=0">
-  <center>  <img src="https://icons.iconarchive.com/icons/xenatt/minimalism/48/App-dropbox-icon.png" height=50 align="center"></center>
-  Dropbox link</a></center>
+<a href="https://github.com/ritartha/critical_current_extract_v1.git">
+  <center>  <img src="https://icons.iconarchive.com/icons/limav/flat-gradient-social/48/Github-icon.png" height=50 align="center"></center>
+  Github link</a></center>
   ''';
 st.markdown(footer,unsafe_allow_html=True)
