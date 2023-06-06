@@ -159,6 +159,8 @@ except NameError:
     st.divider()
     foot = '''<center><h2><span style="color:blue">No File Uploaded or Some Error occured</span></h2></center>'''
     st.markdown(foot,unsafe_allow_html=True)
+    foot2 = '''<center><img src="https://media.giphy.com/media/vPS4IEv9OzedoissRw/giphy.gif" height=100 align="center"></center>'''
+    st.markdown(foot2,unsafe_allow_html=True)
 
 
 st.divider()
